@@ -23,7 +23,7 @@ OK, let's dive in!
 
 This is the code in the `posts#new` form:
 
-```erb
+```ruby
 <!-- app/views/posts/new.html.erb -->
 
 <%= form_tag posts_path do %>
@@ -39,7 +39,7 @@ This is the code in the `posts#new` form:
 
 And this is the code in the `posts#edit` form:
 
-```erb
+```ruby
 <!-- app/views/posts/edit.html.erb -->
 
 <h3>Post Form</h3>
@@ -63,7 +63,7 @@ First, let's create a new file in `app/views/posts/` called `_form.html.erb`. To
 
 Second, let's remove the repeated code in `app/views/posts/edit.html.erb`. The file should look like this:
 
-```erb
+```ruby
 <h3>Post Form</h3>
 
 <%= form_tag post_path(@post), method: "put" do %>
@@ -71,7 +71,7 @@ Second, let's remove the repeated code in `app/views/posts/edit.html.erb`. The f
 ```
 Note that we left in the non-duplicated code. Now, let's also remove the duplicated code in the `app/views/posts/new.html.erb` file. The file should look like this:
 
-```erb
+```ruby
 <%= form_tag posts_path do %>
 <% end %>
 ```
@@ -81,7 +81,7 @@ So, now what? It looks like we are missing a bunch of code in our `posts/new` an
 
 First, we'll place the duplicated code in our new `_form.html.erb` file. The file should look as follows:
 
-```erb
+```ruby
 <label>Post title:</label><br>
 <%= text_field_tag :title, @post.title %><br>
 
@@ -95,7 +95,7 @@ Next, we need to render the code into the `posts/edit` and `posts/new` pages by 
 
 Our `posts/new` file should now look like this:
 
-```erb
+```ruby
 <!-- app/views/posts/new.html.erb -->
 
 <%= form_tag posts_path do %>
@@ -105,7 +105,7 @@ Our `posts/new` file should now look like this:
 
 And our `posts/edit` file like this:
 
-```erb
+```ruby
 <!-- app/views/posts/edit.html.erb -->
 
 <h3>Post Form</h3>
@@ -129,14 +129,14 @@ A couple of things to note:
 
 Let's take a look at our `authors/show.html.erb` file:
 
-```erb
+```ruby
 <%= @author.name %>
 <%= @author.hometown %>
 ```
 
 And now look at the code in `posts/show.html.erb`:
 
-```erb
+```ruby
 <%= @post.author.name %>
 <%= @post.author.hometown %>
 
@@ -146,7 +146,7 @@ And now look at the code in `posts/show.html.erb`:
 
 See the repetition? In both places, we are using the `Author` object to call the `.name` and `.hometown` methods. The first thing we have to fix is the slight difference between the templates. Let's make the beginning portion of the `posts/show` template match the `authors/show` template.
 
-```erb
+```ruby
 <!-- app/views/posts/show.html.erb -->
 
 <%= @author.name %>
@@ -158,7 +158,7 @@ See the repetition? In both places, we are using the `Author` object to call the
 
 Then, let's make a new partial called `app/views/authors/_author.html.erb` and place the repeated code in the file. It should look like the following:
 
-```erb
+```ruby
 <!-- app/views/authors/_author.html.erb -->
 
 <%= @author.name %>
@@ -167,7 +167,7 @@ Then, let's make a new partial called `app/views/authors/_author.html.erb` and p
 
 Now we can just render this partial in our `authors/show` page by doing the following:
 
-```erb
+```ruby
 <!-- app/views/authors/show.html.erb -->
 
 <%= render 'author' %>
@@ -175,7 +175,7 @@ Now we can just render this partial in our `authors/show` page by doing the foll
 
 Let's try making the same change to our `posts/show` page:
 
-```erb
+```ruby
 <!-- app/views/posts/show.html.erb -->
 
 <%= render 'author' %>
@@ -186,7 +186,7 @@ Let's try making the same change to our `posts/show` page:
 
 Uh oh, something went wrong. This won't work because, if we don't specify the partial's parent folder, Rails assumes that the partial lives in the same folder as the view that's calling it. In this case, it looks for a file in the `posts` directory called `_author.html.erb` and doesn't find it. We need to tell Rails to go outside the folder by being explicit about the folder and file name that it should render. We can do that by changing the above code to the following:
 
-```erb
+```ruby
 <!-- app/views/posts/show.html.erb -->
 
 <%= render 'authors/author' %>
